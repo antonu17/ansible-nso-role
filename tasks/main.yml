@@ -1,0 +1,46 @@
+---
+
+- name: install add-apt-repostory
+  become: true
+  apt: name=software-properties-common state=latest
+
+- name: add webupd8team repositories
+  become: true
+  apt_repository: repo="ppa:webupd8team/java" state=present
+
+- name: accept oracle license
+  become: true
+  debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+- name: install required software
+  become: true
+  apt: name={{item}} state=latest update_cache=true
+  with_items:
+    - oracle-java8-installer
+    - ca-certificates
+    - oracle-java8-set-default
+    - git
+    - mc
+    - vim
+    - build-essential
+    - ant
+
+- name: copy nso distribution
+  copy: src={{ installer_name }} dest=~/
+
+- name: set nso installer executable rights
+  file: path=~/{{ installer_name }} mode=0755
+
+- name: install nso
+  command: ~/{{ installer_name }} --local-install ~/nso creates=~/nso
+
+- name: setup nso enviroment
+  command: ~/nso/bin/ncs-setup --dest ~/nso-env creates=~/nso-env
+
+- name: setup nso eclipse enviroment
+  command: ~/nso/bin/ncs-setup --dest ~/nso-env --eclipse-setup creates=~/nso-env/.project
+
+- name: include ncsrc to .bashrc
+  lineinfile: dest=~/.bashrc line='. ~/nso/ncsrc' state=present insertafter=EOF
+
+...
