@@ -1,9 +1,10 @@
 # ansible-nso-role
 
-Ansible role for Cisco NSO / Tail-f NCS
-Installs Network Services Orchestrator to Ubuntu Trusty / Xenial
+Ansible role for Cisco NSO / Tail-f NCS.
 
-Pass installer file name as a parameter.
+Installs Network Services Orchestrator to Ubuntu Trusty / Xenial.
+
+Pass installer file name as a parameter:
 
 ```
   roles:
