@@ -14,7 +14,7 @@
 
 - name: install required software
   become: true
-  apt: name={{item}} state=latest update_cache=true
+  apt: name={{item}} state=latest update_cache=true cache_valid_time=3600
   with_items:
     - oracle-java8-installer
     - ca-certificates
